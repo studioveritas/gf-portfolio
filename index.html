@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guillaume Furminger Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Technical-sheet system: paper, ink, one acid signal. 12-col grid, registration marks, bracketed mono labels. */
+  --paper:#E6E6E1; --paper-2:#DCDCD6; --ink:#0D0D0C; --mute:#5E5E59; --line:rgba(13,13,12,.16); --signal:#D2FF1F;
+  --night:#0D0D0C; --night-ink:#E6E6E1;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --g:clamp(16px,2.6vw,40px);
+  color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{background:var(--paper);color:var(--ink);font:400 15px/1.55 var(--mono);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;box-shadow:0 0 0 5px var(--signal)}
+mark{background:var(--signal);color:var(--ink);padding:0 .12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.tc{font:500 11px/1 var(--mono);letter-spacing:.06em}
+h1,h2,h3,.client,.res-head{font-family:var(--display);text-wrap:balance}
+::selection{background:var(--signal);color:var(--ink)}
+
+/* grain over everything */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.07;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky;top:0;z-index:50;display:grid;grid-template-columns:auto 1fr auto auto;gap:24px;align-items:center;
+  padding:12px var(--g);background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.bar .who{font-weight:600}
+.bar .who b{background:var(--ink);color:var(--paper);padding:3px 5px;margin-left:6px}
+.bar nav{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.bar nav a{text-decoration:none;padding:4px 0;border-bottom:1px solid transparent}
+.bar nav a:hover,.bar nav a.on{border-color:var(--ink)}
+.bar .now{display:flex;gap:14px;color:var(--mute);font-variant-numeric:tabular-nums}
+.bar .now .cur{color:var(--ink)}
+.tog{display:inline-flex;border:1px solid var(--ink)}
+.tog button{font:inherit;letter-spacing:inherit;text-transform:uppercase;background:none;border:0;padding:5px 8px;cursor:pointer;color:var(--ink)}
+.tog button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.prog{position:absolute;left:0;bottom:-1px;height:2px;background:var(--ink);width:0}
+
+/* ---------- hero ---------- */
+.hero{position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero-in{position:relative;display:grid;grid-template-columns:repeat(12,1fr);gap:0 var(--g);padding:clamp(28px,5vw,64px) var(--g) clamp(28px,4vw,56px);pointer-events:none}
+.hero-in a,.hero-in button{pointer-events:auto}
+.spec{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,max-content);gap:6px 36px;font:500 11px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;margin-bottom:clamp(28px,5vw,72px)}
+.spec span{background:var(--paper);padding:0 2px}
+.hero h1{grid-column:1/-1;font-weight:700;font-stretch:72%;font-size:clamp(52px,10.4vw,176px);line-height:.86;letter-spacing:-.035em;text-transform:none}
+.hero h1 .l2{display:block;padding-left:clamp(0px,9vw,180px)}
+.hero h1 span{background:var(--paper);box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.hero h1 mark{background:var(--signal)}
+.hero .sub{grid-column:1/span 6;margin-top:clamp(24px,3vw,44px);font-size:15px;max-width:58ch;background:var(--paper)}
+.hero .cta{grid-column:8/-1;align-self:end;justify-self:end;display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.btn{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:12px 14px;border:1px solid var(--ink);background:var(--paper);display:inline-flex;gap:10px;align-items:center}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn:hover{background:var(--signal);color:var(--ink)}
+.hint{position:absolute;right:var(--g);top:14px;font:500 10px/1 var(--mono);letter-spacing:.08em;color:var(--mute);text-transform:uppercase;background:var(--paper);padding:2px}
+
+/* ---------- generic sheets ---------- */
+.wrap{padding:0 var(--g)}
+.sec-h{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);align-items:end;padding:clamp(56px,7vw,110px) 0 24px;border-bottom:1px solid var(--ink)}
+.sec-h .tc{grid-column:1/span 2}
+.sec-h h2{grid-column:3/-1;font-weight:700;font-stretch:80%;font-size:clamp(34px,5vw,76px);line-height:.92;letter-spacing:-.03em}
+.sec-h p{grid-column:3/span 7;color:var(--mute);margin-top:8px}
+.sheet{position:relative;border:1px solid var(--line);background:var(--paper);padding:clamp(18px,2.4vw,34px);margin-top:var(--g)}
+.reg{position:absolute;width:13px;height:13px;pointer-events:none}
+.reg::before,.reg::after{content:"";position:absolute;background:var(--ink)}
+.reg::before{left:6px;top:0;width:1px;height:13px}.reg::after{top:6px;left:0;height:1px;width:13px}
+.reg.tl{left:-7px;top:-7px}.reg.tr{right:-7px;top:-7px}.reg.bl{left:-7px;bottom:-7px}.reg.br{right:-7px;bottom:-7px}
+
+/* glance */
+.glance{width:100%;border-collapse:collapse;margin-top:18px;font-size:13px}
+.glance th{font:500 11px/1 var(--mono);letter-spacing:.08em;text-align:left;color:var(--mute);padding:10px 0;border-bottom:1px solid var(--line)}
+.glance td{padding:14px 12px 14px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.glance td:first-child{font-family:var(--display);font-weight:600;font-size:clamp(17px,1.7vw,24px);letter-spacing:-.01em;width:34%}
+.glance tr:hover td{background:var(--signal)}
+.note{color:var(--mute);font-size:12px;margin-top:14px}
+
+/* cells (hired / lead) */
+.cells{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--line);margin-top:22px}
+.cell{position:relative;padding:22px 20px 26px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);border-top:1px solid var(--line);min-height:230px;display:flex;flex-direction:column;gap:12px;transition:background .25s}
+.cell h3{font-weight:700;font-stretch:85%;font-size:clamp(22px,2.1vw,30px);line-height:1;letter-spacing:-.02em}
+.cell p{font-size:13px}
+.cell .go{margin-top:auto;font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.cell[data-filter]:not([data-filter=""]){cursor:pointer}
+.cell[data-filter]:not([data-filter=""]):hover{background:var(--signal)}
+
+/* ---------- index tracklist ---------- */
+.index{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g)}
+.filters{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px;align-items:center}
+.filters .tc{margin-right:8px;color:var(--mute)}
+.chipb{font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:8px 10px;border:1px solid var(--ink);background:transparent;cursor:pointer;color:var(--ink)}
+.chipb[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.tracks{grid-column:span 12;list-style:none}
+.tracks .side{font:700 clamp(28px,4vw,56px)/1 var(--display);font-stretch:75%;letter-spacing:-.03em;padding:28px 0 6px;border-bottom:1px solid var(--ink)}
+.tracks .side em{font-style:normal;font-weight:300}
+.trk a{display:grid;grid-template-columns:70px 1fr auto auto;gap:18px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line);text-decoration:none;transition:padding .25s,opacity .25s}
+.trk .nm{font:600 clamp(28px,4.6vw,72px)/.95 var(--display);font-stretch:70%;letter-spacing:-.035em}
+.trk .tg{font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.trk .yr{font:500 clamp(18px,2vw,30px)/1 var(--display);font-stretch:80%;font-variant-numeric:tabular-nums}
+.trk a:hover{padding-left:14px;background:linear-gradient(90deg,var(--signal),var(--signal)) no-repeat 0 100%/100% 100%}
+.trk.dim a{opacity:.18}
+.peek{position:fixed;left:0;top:0;width:min(340px,30vw);aspect-ratio:4/3;pointer-events:none;z-index:60;opacity:0;transform:translate(-50%,-50%) scale(.92);transition:opacity .18s,transform .18s;border:1px solid var(--ink);background:var(--paper) center/cover no-repeat}
+.peek.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.peek::after{content:attr(data-code);position:absolute;left:0;top:0;background:var(--ink);color:var(--paper);font:500 10px/1 var(--mono);padding:4px 6px;letter-spacing:.06em}
+
+/* ---------- figures: halftone duotone, colour on hover ---------- */
+.fig{position:relative;overflow:hidden;background:var(--ink);cursor:zoom-in;margin:0}
+.fig img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.25) brightness(1.08);transition:filter .5s,transform .8s cubic-bezier(.2,.7,.1,1)}
+.fig .tone{position:absolute;inset:0;pointer-events:none;background:var(--signal);mix-blend-mode:multiply;transition:opacity .5s}
+.fig .tone::after{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(13,13,12,.55) 32%,transparent 36%) 0 0/4px 4px;mix-blend-mode:soft-light;opacity:.9}
+.fig figcaption{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;gap:12px;padding:8px 10px;font:500 10px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:var(--paper);transform:translateY(101%);transition:transform .3s}
+.fig:hover img,.fig:focus-visible img,body.colour .fig img{filter:none}
+.fig:hover img{transform:scale(1.025)}
+.fig:hover .tone,.fig:focus-visible .tone,body.colour .fig .tone{opacity:0}
+.fig:hover figcaption,.fig:focus-visible figcaption{transform:none}
+body.colour .fig figcaption{transform:none}
+
+/* ---------- cases ---------- */
+.case-top{display:grid;grid-template-columns:auto auto 1fr auto;gap:20px;align-items:baseline;padding-bottom:12px;border-bottom:1px solid var(--line);font:500 11px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.case-top .big{font:700 clamp(30px,3.4vw,52px)/1 var(--display);font-stretch:75%;letter-spacing:-.02em}
+.case-top .big small{font-size:.42em;color:var(--mute);font-weight:500}
+.case-top .meta{color:var(--mute)}
+.case-top .tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.case-top .tags b{font-weight:500;border:1px solid var(--line);padding:4px 6px}
+.case-title{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);align-items:end;padding:clamp(22px,3vw,44px) 0 clamp(18px,2vw,28px)}
+.client{grid-column:1/span 8;font-weight:700;font-stretch:68%;font-size:clamp(48px,8.6vw,150px);line-height:.84;letter-spacing:-.045em}
+.headline{grid-column:9/-1;font:500 clamp(18px,1.7vw,24px)/1.25 var(--display);letter-spacing:-.01em;justify-self:end;text-align:right}
+.fig.hero{aspect-ratio:16/8;border:1px solid var(--ink)}
+.strip{display:grid;gap:10px;margin-top:10px}
+.strip.n1{grid-template-columns:1fr}.strip.n2{grid-template-columns:1fr 1fr}.strip.n3{grid-template-columns:repeat(3,1fr)}.strip.n4{grid-template-columns:repeat(4,1fr)}
+.strip .fig{aspect-ratio:4/3}
+.strip.n1 .fig{aspect-ratio:16/7}
+.blocks{display:grid;gap:0;margin-top:clamp(20px,2.4vw,34px);border-top:1px solid var(--ink)}
+.blocks.n4{grid-template-columns:repeat(4,1fr)}.blocks.n3{grid-template-columns:repeat(3,1fr)}
+.blk{padding:16px 18px 6px 0}
+.blk + .blk{padding-left:18px;border-left:1px solid var(--line)}
+.blk h4{font:600 11px/1 var(--mono);letter-spacing:.08em;margin-bottom:10px}
+.blk p{font-size:14px;max-width:42ch}
+.extra{margin-top:20px;padding:14px 16px;border:1px dashed var(--ink);font-size:14px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.chip{font:500 10px/1 var(--mono);letter-spacing:.08em;background:var(--ink);color:var(--paper);padding:4px 6px}
+
+/* results */
+.results{background:var(--ink);color:var(--night-ink);border-color:var(--ink)}
+.results .reg::before,.results .reg::after{background:var(--ink)}
+.results .case-top{border-color:rgba(230,230,225,.2)}
+.results .case-top .meta,.results .case-top .big small{color:#9a9a94}
+.res-head{font-weight:600;font-stretch:80%;font-size:clamp(26px,3.4vw,52px);line-height:1;letter-spacing:-.025em;margin:clamp(22px,3vw,40px) 0;max-width:22ch}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(230,230,225,.2)}
+.stat{padding:22px 18px 26px 0;border-bottom:1px solid rgba(230,230,225,.2);display:flex;flex-direction:column;gap:8px}
+.stat:not(:nth-child(3n+1)){padding-left:18px;border-left:1px solid rgba(230,230,225,.2)}
+.num{font:700 clamp(54px,7.6vw,128px)/.85 var(--display);font-stretch:70%;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:var(--signal)}
+.stat .cap{font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.stat .delta{align-self:flex-start;font:600 11px/1 var(--mono);background:var(--signal);color:var(--ink);padding:4px 6px}
+.ticker{overflow:hidden;margin-top:22px;border-top:1px solid rgba(230,230,225,.2);padding-top:14px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.tick-in{display:inline-flex;gap:48px;animation:tick 28s linear infinite}
+.tick-in span b{color:var(--signal);font-weight:600}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- more work divider (pixel field) ---------- */
+.more{position:relative;margin-top:var(--g);min-height:min(78vh,720px);overflow:hidden;border:1px solid var(--ink);background:#bfe0f5}
+.more canvas{position:absolute;inset:0;width:100%;height:100%}
+.more .ttl{position:absolute;left:var(--g);bottom:var(--g);font:700 clamp(60px,12vw,200px)/.8 var(--display);font-stretch:68%;letter-spacing:-.05em;color:var(--ink)}
+.more .ttl small{display:block;font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.ml{position:absolute;left:var(--x);top:var(--y);display:inline-flex;gap:8px;align-items:center;font:500 clamp(11px,1.1vw,15px)/1 var(--display);letter-spacing:.01em;text-decoration:none;color:var(--ink);white-space:nowrap}
+.ml::before{content:"";width:11px;height:11px;background:var(--ink);flex:none}
+.ml[data-v="1"]{writing-mode:vertical-rl;transform:rotate(180deg)}
+.ml:hover{background:var(--signal)}
+
+/* B side cards */
+.bgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--g);margin-top:var(--g)}
+.bcard{grid-column:span 4;border-top:1px solid var(--ink);padding-top:12px;display:flex;flex-direction:column;gap:14px}
+.bcard:nth-child(1),.bcard:nth-child(2),.bcard:nth-child(6),.bcard:nth-child(7){grid-column:span 6}
+.bcard .fig,.bcard .gen{aspect-ratio:4/3}
+.bcard h3{font-weight:700;font-stretch:72%;font-size:clamp(30px,3.4vw,52px);line-height:.9;letter-spacing:-.035em;margin-top:6px}
+.bcard .bhead{font:500 17px/1.25 var(--display)}
+.bcard p{font-size:13px;max-width:52ch}
+.bcard .bmeta{color:var(--mute);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.gen{position:relative;border:1px solid var(--ink);background:var(--paper-2)}
+.gen canvas{position:absolute;inset:0;width:100%;height:100%}
+.gen span{position:absolute;right:8px;bottom:8px;font:500 10px/1 var(--mono);background:var(--ink);color:var(--paper);padding:4px 6px}
+.ext{white-space:nowrap}
+
+/* contact */
+.contact{margin-top:clamp(60px,8vw,120px);background:var(--ink);color:var(--night-ink);padding:clamp(28px,4vw,60px) var(--g) 24px;position:relative;overflow:hidden}
+.contact h2{font-weight:700;font-stretch:66%;font-size:clamp(64px,14vw,240px);line-height:.8;letter-spacing:-.05em}
+.contact h2 mark{color:var(--ink)}
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--g);margin-top:clamp(28px,4vw,56px);border-top:1px solid rgba(230,230,225,.25);padding-top:18px}
+.cgrid .tc{color:#9a9a94;display:block;margin-bottom:10px}
+.cgrid a,.cgrid span.v{font:500 clamp(16px,1.6vw,22px)/1.2 var(--display);text-decoration:none;word-break:break-word}
+.cgrid a:hover{background:var(--signal);color:var(--ink)}
+.copyb{margin-top:10px;font:500 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid rgba(230,230,225,.4);color:var(--night-ink);padding:6px 8px;cursor:pointer}
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:clamp(40px,6vw,80px);font:500 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#9a9a94}
+.foot .bars{height:28px;width:130px;background:repeating-linear-gradient(90deg,var(--night-ink) 0 2px,transparent 2px 4px,var(--night-ink) 4px 5px,transparent 5px 8px,var(--night-ink) 8px 11px,transparent 11px 12px)}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:100;background:rgba(13,13,12,.94);display:none;grid-template-rows:auto 1fr auto;padding:16px var(--g);color:var(--night-ink)}
+.lb.on{display:grid}
+.lb .lt{display:flex;justify-content:space-between;font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;align-items:center}
+.lb button{font:inherit;letter-spacing:inherit;text-transform:uppercase;background:none;border:1px solid rgba(230,230,225,.4);color:inherit;padding:8px 10px;cursor:pointer}
+.lb button:hover{background:var(--signal);color:var(--ink)}
+.lb .stage{display:grid;place-items:center;min-height:0;padding:16px 0}
+.lb .stage img{max-height:100%;max-width:100%;object-fit:contain}
+.lb .lnav{display:flex;justify-content:space-between}
+
+/* keys hint */
+.keys{position:fixed;right:var(--g);bottom:16px;z-index:40;font:500 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;background:var(--paper);border:1px solid var(--ink);padding:7px 9px;display:flex;gap:8px;align-items:center}
+.keys kbd{font:inherit;border:1px solid var(--ink);padding:2px 5px}
+.keys .cur{font-weight:600}
+
+/* responsive */
+@media (max-width:960px){
+  .bar{grid-template-columns:1fr auto}
+  .bar nav,.bar .now .loc{display:none}
+  .spec{grid-template-columns:repeat(2,max-content)}
+  .hero .sub,.hero .cta{grid-column:1/-1;justify-self:start}
+  .cells{grid-template-columns:1fr 1fr}
+  .client{grid-column:1/-1}.headline{grid-column:1/-1;justify-self:start;text-align:left}
+  .blocks.n4,.blocks.n3{grid-template-columns:1fr 1fr}
+  .blk:nth-child(odd){padding-left:0;border-left:0}
+  .strip.n4{grid-template-columns:1fr 1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .stat{padding-left:18px!important;border-left:1px solid rgba(230,230,225,.2)}
+  .stat:nth-child(odd){padding-left:0!important;border-left:0}
+  .bcard,.bcard:nth-child(n){grid-column:span 6}
+  .case-top{grid-template-columns:auto 1fr}.case-top .meta,.case-top .tags{grid-column:1/-1;justify-content:flex-start}
+  .keys{display:none}
+}
+@media (max-width:600px){
+  .cells,.blocks.n4,.blocks.n3,.strip.n2,.strip.n3,.strip.n4,.stats,.cgrid{grid-template-columns:1fr}
+  .blk + .blk{padding-left:0;border-left:0;border-top:1px solid var(--line)}
+  .stat{padding-left:0!important;border-left:0!important}
+  .bcard,.bcard:nth-child(n){grid-column:1/-1}
+  .trk a{grid-template-columns:44px 1fr auto}.trk .tg{display:none}
+  .glance td:nth-child(3){display:none}.glance th:nth-child(3){display:none}
+  .fig.hero{aspect-ratio:4/3}
+  .peek{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="bar" role="banner">
+  <span class="who">Guillaume Furminger<b>ECD</b></span>
+  <nav aria-label="Sections">
+    <a href="#pov">Point of view</a><a href="#index">Index</a><a href="#work">Work</a><a href="#more">More work</a><a href="#lead">How I lead</a><a href="#contact">Contact</a>
+  </nav>
+  <span class="now"><span class="loc">52.3676° N 4.9041° E</span><span>AMS <span id="clock">--:--:--</span></span></span>
+  <span class="tog" role="group" aria-label="Image mode"><button type="button" id="mMono" aria-pressed="true">Mono</button><button type="button" id="mCol" aria-pressed="false">Colour</button></span>
+  <i class="prog" id="prog"></i>
+</header>
+
+<main>
+<section class="hero" id="pov" aria-label="Point of view">
+  <canvas id="field" aria-hidden="true"></canvas>
+  <span class="hint" aria-hidden="true">[ Move across the field ]</span>
+  <div class="hero-in">
+    <div class="spec">
+      <span>[ Point of view ]</span><span>Executive Creative Director</span><span>Amsterdam, NL</span><span>[ 20+ ] years</span>
+      <span>Brand · Comms · Experience</span><span>Retail · Digital · PR</span><span>Trained in industrial design</span><span>[ 15 ] projects below</span>
+    </div>
+    <h1><span>From the object</span><span class="l2"><span>to the <mark>experience.</mark></span></span></h1>
+    <p class="sub">Trained in industrial design, I treat a brand as something people hold, walk through, watch and share, and design every one of those moments as one system.</p>
+    <div class="cta"><a class="btn solid" href="#index">See the work ↓</a><a class="btn" href="#contact">Get in touch</a></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section id="glance" aria-labelledby="glance-h">
+    <div class="sec-h"><span class="tc">[ 01 ] AT A GLANCE</span><h2 id="glance-h">20+ years, six studios, one way of working.</h2></div>
+    <table class="glance">
+      <thead><tr><th scope="col">STUDIO</th><th scope="col">ROLE</th><th scope="col">SELECTED WORK</th></tr></thead>
+      <tbody><tr><td>Brand Potential Benelux</td><td>Executive Creative Director</td><td>Gallagher PREM, RTHA, Coca-Cola</td></tr><tr><td>HarrimanSteel</td><td>Creative Director</td><td>Uber, Jordan, Seedlip, Aid Alliance</td></tr><tr><td>Studio Bonjour Design</td><td>Founder and ECD</td><td>Canyon, Lapierre</td></tr><tr><td>Green Room Design</td><td>Creative Lead</td><td>ASICS, PUMA</td></tr><tr><td>adidas Brand Design</td><td>Art Director / Senior Designer</td><td>adidas Clima</td></tr><tr><td>Le Pub</td><td>Strategy and innovation</td><td>Heineken</td></tr></tbody>
+    </table>
+    <p class="note">Trained in industrial design. Former ECD and Acting Managing Director. Based in Amsterdam.</p>
+  </section>
+
+  <section id="hired" aria-labelledby="hired-h">
+    <div class="sec-h"><span class="tc">[ 02 ] WHAT I'M HIRED FOR</span><h2 id="hired-h">Four things clients bring me in for.</h2><p>Select one to filter the index.</p></div>
+    <div class="cells"><div class="cell" data-filter="brand"><span class="tc">01</span><h3>Brand creation</h3><p>Gallagher PREM: stadiums at 82% capacity, a league record. Rotterdam The Hague Airport. The Rugby Awards.</p><span class="go">See the work →</span></div><div class="cell" data-filter="platform"><span class="tc">02</span><h3>Platforms that last</h3><p>Two years of Uber social impact. ASICS Tennis. Canyon :ON. adidas Clima across four seasons.</p><span class="go">See the work →</span></div><div class="cell" data-filter="experience"><span class="tc">03</span><h3>Experience and retail</h3><p>PUMA Skill Cube on Fifth Avenue. Allbirds at Selfridges and Le Bon Marché. Coca-Cola Baco at A&#x27;DAM Tower.</p><span class="go">See the work →</span></div><div class="cell" data-filter=""><span class="tc">04</span><h3>Leading teams</h3><p>Former ECD and Acting Managing Director. Teams of 10 to 20 across strategy, design, film, PR and production.</p></div></div>
+  </section>
+
+  <section id="index" aria-labelledby="index-h">
+    <div class="sec-h"><span class="tc">[ 03 ] INDEX</span><h2 id="index-h">Fifteen projects. Eight in depth, seven for range.</h2></div>
+    <div class="index">
+      <div class="filters" role="group" aria-label="Filter projects">
+        <span class="tc">FILTER</span>
+        <button type="button" class="chipb" data-f="all" aria-pressed="true">All</button>
+        <button type="button" class="chipb" data-f="brand" aria-pressed="false">Brand creation</button>
+        <button type="button" class="chipb" data-f="platform" aria-pressed="false">Platforms that last</button>
+        <button type="button" class="chipb" data-f="experience" aria-pressed="false">Experience and retail</button>
+      </div>
+      <ol class="tracks" aria-label="A side, in depth"><li class="side">A SIDE: <em>In depth</em></li><li class="trk" data-tags="brand platform"><a href="#prem" data-img="img/prem_b.jpg"><span class="tc">A01</span><span class="nm">Gallagher PREM</span><span class="tg">Brand / Platforms</span><span class="yr">(2024–25)</span></a></li><li class="trk" data-tags="brand"><a href="#rugby" data-img="img/rugby_b.jpg"><span class="tc">A02</span><span class="nm">The Rugby Awards</span><span class="tg">Brand</span><span class="yr">(2025)</span></a></li><li class="trk" data-tags="brand experience"><a href="#rtha" data-img="img/rtha_a.jpg"><span class="tc">A03</span><span class="nm">RTHA</span><span class="tg">Brand / Experience</span><span class="yr">(2024–25)</span></a></li><li class="trk" data-tags="platform"><a href="#uber" data-img="img/uber_b.jpg"><span class="tc">A04</span><span class="nm">Uber</span><span class="tg">Platforms</span><span class="yr">(2020–22)</span></a></li><li class="trk" data-tags="platform brand"><a href="#canyon" data-img="img/canyon_a.jpg"><span class="tc">A05</span><span class="nm">Canyon</span><span class="tg">Platforms / Brand</span></a></li><li class="trk" data-tags="platform"><a href="#seedlip" data-img="img/seedlip_a.jpg"><span class="tc">A06</span><span class="nm">Seedlip</span><span class="tg">Platforms</span></a></li><li class="trk" data-tags="platform"><a href="#jordan" data-img="img/jordan_b.jpg"><span class="tc">A07</span><span class="nm">Jordan Wings</span><span class="tg">Platforms</span></a></li><li class="trk" data-tags="experience"><a href="#coke" data-img="img/coke_a.jpg"><span class="tc">A08</span><span class="nm">Coca-Cola Benelux</span><span class="tg">Experience</span></a></li></ol><ol class="tracks" aria-label="B side, range"><li class="side">B SIDE: <em>Range</em></li><li class="trk" data-tags="platform"><a href="#asics" data-img="img/asics_a.jpg"><span class="tc">B01</span><span class="nm">ASICS Tennis</span><span class="tg">Platforms</span></a></li><li class="trk" data-tags="experience"><a href="#puma" data-img="img/puma_a.jpg"><span class="tc">B02</span><span class="nm">PUMA Skill Cube</span><span class="tg">Experience</span><span class="yr">(2019–20)</span></a></li><li class="trk" data-tags="brand"><a href="#aid" data-img="img/aid_a.jpg"><span class="tc">B03</span><span class="nm">Aid Alliance</span><span class="tg">Brand</span></a></li><li class="trk" data-tags="experience"><a href="#allbirds" data-img="img/allbirds_a.jpg"><span class="tc">B04</span><span class="nm">Allbirds</span><span class="tg">Experience</span></a></li><li class="trk" data-tags="platform"><a href="#adidas" data-img="img/adidas_b.jpg"><span class="tc">B05</span><span class="nm">adidas Clima</span><span class="tg">Platforms</span></a></li><li class="trk" data-tags="experience"><a href="#heineken" data-img="img/heineken_a.jpg"><span class="tc">B06</span><span class="nm">Heineken</span><span class="tg">Experience</span></a></li><li class="trk" data-tags="platform"><a href="#jyuni" data-img="img/jyuni_a.jpg"><span class="tc">B07</span><span class="nm">ASICS JYUNI</span><span class="tg">Platforms</span></a></li></ol>
+    </div>
+  </section>
+
+  <section id="work" aria-label="Work in depth">
+    <div class="sec-h"><span class="tc">[ 04 ] A SIDE</span><h2>In depth.</h2><p>Each project: the tension, the idea, the result and my role.</p></div>
+    
+<section class="case sheet" id="prem" data-code="A01" data-name="Gallagher PREM" data-tags="brand platform">
+  <i class="reg tl"></i><i class="reg tr"></i><i class="reg bl"></i><i class="reg br"></i>
+  <header class="case-top">
+    <span class="tc big">A01<small>/08</small></span>
+    <span class="lbl">[ RUGBY UNLEASHED ]</span>
+    <span class="meta">Brand Potential Benelux · 2024–25 · Executive Creative Director</span>
+    <span class="tags"><b>Brand creation</b><b>Platforms that last</b></span>
+  </header>
+  <div class="case-title">
+    <h2 class="client">Gallagher PREM</h2>
+    <p class="headline"><mark>Unpolished beauty.</mark></p>
+  </div>
+  <figure class="fig hero" data-full="img/prem_b.jpg" data-cap="A01.1 · TRUE POWER key visual" tabindex="0" role="button" aria-label="Open image: TRUE POWER key visual"><img src="img/prem_b.jpg" alt="TRUE POWER key visual" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A01.1</span><span>TRUE POWER key visual</span></figcaption></figure>
+  <div class="strip n4"><figure class="fig " data-full="img/prem_e.jpg" data-cap="A01.2 · The new league mark" tabindex="0" role="button" aria-label="Open image: The new league mark"><img src="img/prem_e.jpg" alt="The new league mark" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A01.2</span><span>The new league mark</span></figcaption></figure><figure class="fig " data-full="img/prem_c.jpg" data-cap="A01.3 · RAW SPEED on the London Underground" tabindex="0" role="button" aria-label="Open image: RAW SPEED on the London Underground"><img src="img/prem_c.jpg" alt="RAW SPEED on the London Underground" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A01.3</span><span>RAW SPEED on the London Underground</span></figcaption></figure><figure class="fig " data-full="img/prem_d.jpg" data-cap="A01.4 · THE FINAL out of home" tabindex="0" role="button" aria-label="Open image: THE FINAL out of home"><img src="img/prem_d.jpg" alt="THE FINAL out of home" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A01.4</span><span>THE FINAL out of home</span></figcaption></figure><figure class="fig " data-full="img/prem_a.jpg" data-cap="A01.5 · Matchday on TNT Sports" tabindex="0" role="button" aria-label="Open image: Matchday on TNT Sports"><img src="img/prem_a.jpg" alt="Matchday on TNT Sports" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A01.5</span><span>Matchday on TNT Sports</span></figcaption></figure></div>
+  <div class="blocks n4"><div class="blk"><h4>[ Tension ]</h4><p>Double weekly reach from 1.9m to 3.8m: keep loyal fans, win casual sports fans and honour the heritage.</p></div><div class="blk"><h4>[ Idea ]</h4><p>Stop polishing the sport. A name fans actually say, a wordmark that leans in, the sponsor built into the mark.</p></div><div class="blk"><h4>[ Result ]</h4><p>687m social views (+90%) and stadiums at 82% capacity, a league record. Every fixture live on TNT Sports.</p></div><div class="blk"><h4>[ Role ]</h4><p>I set the direction and led the team from strategy through identity, motion and rollout.</p></div></div>
+  
+</section>
+<section class="sheet results" id="prem-results" aria-label="Gallagher PREM results">
+  <i class="reg tl"></i><i class="reg tr"></i><i class="reg bl"></i><i class="reg br"></i>
+  <header class="case-top"><span class="tc big">A01<small>.R</small></span><span class="lbl">[ WHAT CHANGED ]</span><span class="meta">Gallagher PREM · season results</span></header>
+  <h3 class="res-head">Social views nearly doubled, and stadiums hit a league record.</h3>
+  <div class="stats"><div class="stat"><span class="num" data-v="687m">687m</span><span class="cap">social views</span><span class="delta">+90%</span></div><div class="stat"><span class="num" data-v="180k">180k</span><span class="cap">new followers</span><span class="delta">+59%</span></div><div class="stat"><span class="num" data-v="19.2m">19.2m</span><span class="cap">engagements</span><span class="delta">+43%</span></div><div class="stat"><span class="num" data-v="82%">82%</span><span class="cap">stadium capacity</span><span class="delta">league record</span></div><div class="stat"><span class="num" data-v="1.34m">1.34m</span><span class="cap">total attendance</span></div><div class="stat"><span class="num" data-v="158k">158k</span><span class="cap">average TNT Sports audience</span><span class="delta">+7%</span></div></div>
+  <div class="ticker" aria-label="More results"><div class="tick-in"><span><b>10.9m</b> cumulative TNT broadcast +4%</span> <span><b>8.8m</b> fans +6%</span> <span><b>548k</b> marketable database +12%</span> <span><b>10.9m</b> cumulative TNT broadcast +4%</span> <span><b>8.8m</b> fans +6%</span> <span><b>548k</b> marketable database +12%</span></div></div>
+</section>
+<section class="case sheet" id="rugby" data-code="A02" data-name="The Rugby Awards" data-tags="brand">
+  <i class="reg tl"></i><i class="reg tr"></i><i class="reg bl"></i><i class="reg br"></i>
+  <header class="case-top">
+    <span class="tc big">A02<small>/08</small></span>
+    <span class="lbl">[ ONE NIGHT FOR THE WHOLE GAME ]</span>
+    <span class="meta">Brand Potential Benelux · 2025 · Identity and creative assets</span>
+    <span class="tags"><b>Brand creation</b></span>
+  </header>
+  <div class="case-title">
+    <h2 class="client">The Rugby Awards</h2>
+    <p class="headline"><mark>One night for the whole game.</mark></p>
+  </div>
+  <figure class="fig hero" data-full="img/rugby_b.jpg" data-cap="A02.1 · The Rugby Awards 2025 identity" tabindex="0" role="button" aria-label="Open image: The Rugby Awards 2025 identity"><img src="img/rugby_b.jpg" alt="The Rugby Awards 2025 identity" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A02.1</span><span>The Rugby Awards 2025 identity</span></figcaption></figure>
+  <div class="strip n1"><figure class="fig " data-full="img/rugby_a.jpg" data-cap="A02.2 · The first awards night, live" tabindex="0" role="button" aria-label="Open image: The first awards night, live"><img src="img/rugby_a.jpg" alt="The first awards night, live" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A02.2</span><span>The first awards night, live</span></figcaption></figure></div>
+  <div class="blocks n3"><div class="blk"><h4>[ Tension ]</h4><p>Four bodies (Premiership Rugby, RPA, RFU and PWR) and a brand-new awards night with no visual history.</p></div><div class="blk"><h4>[ Idea ]</h4><p>A celebratory identity: a palette taken from the season&#x27;s moments, graphics that move like the ball.</p></div><div class="blk"><h4>[ Result ]</h4><p>A modular system across digital, print and the live event for the first Rugby Awards.</p></div></div>
+  
+</section>
+<section class="case sheet" id="rtha" data-code="A03" data-name="RTHA" data-tags="brand experience">
+  <i class="reg tl"></i><i class="reg tr"></i><i class="reg bl"></i><i class="reg br"></i>
+  <header class="case-top">
+    <span class="tc big">A03<small>/08</small></span>
+    <span class="lbl">[ PROXIMITY IS POWER ]</span>
+    <span class="meta">Brand Potential Benelux · 2024–25 · Executive Creative Director · team of 10</span>
+    <span class="tags"><b>Brand creation</b><b>Experience and retail</b></span>
+  </header>
+  <div class="case-title">
+    <h2 class="client">Rotterdam The Hague Airport</h2>
+    <p class="headline"><mark>Proximity is power.</mark></p>
+  </div>
+  <figure class="fig hero" data-full="img/rtha_a.jpg" data-cap="A03.1 · The identity in the field" tabindex="0" role="button" aria-label="Open image: The identity in the field"><img src="img/rtha_a.jpg" alt="The identity in the field" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A03.1</span><span>The identity in the field</span></figcaption></figure>
+  <div class="strip n3"><figure class="fig " data-full="img/rtha_d.jpg" data-cap="A03.2 · One line: tower and tail fin" tabindex="0" role="button" aria-label="Open image: One line: tower and tail fin"><img src="img/rtha_d.jpg" alt="One line: tower and tail fin" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A03.2</span><span>One line: tower and tail fin</span></figcaption></figure><figure class="fig " data-full="img/rtha_c.jpg" data-cap="A03.3 · Terminal communications" tabindex="0" role="button" aria-label="Open image: Terminal communications"><img src="img/rtha_c.jpg" alt="Terminal communications" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A03.3</span><span>Terminal communications</span></figcaption></figure><figure class="fig " data-full="img/rtha_b.jpg" data-cap="A03.4 · Dichtbij on social" tabindex="0" role="button" aria-label="Open image: Dichtbij on social"><img src="img/rtha_b.jpg" alt="Dichtbij on social" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A03.4</span><span>Dichtbij on social</span></figcaption></figure></div>
+  <div class="blocks n4"><div class="blk"><h4>[ Tension ]</h4><p>A regional airport competing on a scale it could never win. Its real strength, closeness, was undervalued.</p></div><div class="blk"><h4>[ Idea ]</h4><p>Dichtbij: civic pride for Rotterdam and South Holland, and two minutes from door to plane.</p></div><div class="blk"><h4>[ Craft ]</h4><p>One continuous line draws the control tower and a tail fin. The system runs from fire trucks to cafes and wayfinding.</p></div><div class="blk"><h4>[ Role ]</h4><p>I led 10 people from strategy to a full-airport rollout, aligning government, airlines and residents.</p></div></div>
+  
+</section>
+<section class="case sheet" id="uber" data-code="A04" data-name="Uber" data-tags="platform">
+  <i class="reg tl"></i><i class="reg tr"></i><i class="reg bl"></i><i class="reg br"></i>
+  <header class="case-top">
+    <span class="tc big">A04<small>/08</small></span>
+    <span class="lbl">[ SOCIAL IMPACT ]</span>
+    <span class="meta">HarrimanSteel · 2020–22 · Creative Director · team of about 20</span>
+    <span class="tags"><b>Platforms that last</b></span>
+  </header>
+  <div class="case-title">
+    <h2 class="client">Uber</h2>
+    <p class="headline"><mark>Reveal the action.</mark></p>
+  </div>
+  <figure class="fig hero" data-full="img/uber_b.jpg" data-cap="A04.1 · Everyday Giants" tabindex="0" role="button" aria-label="Open image: Everyday Giants"><img src="img/uber_b.jpg" alt="Everyday Giants" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A04.1</span><span>Everyday Giants</span></figcaption></figure>
+  <div class="strip n2"><figure class="fig " data-full="img/uber_a.jpg" data-cap="A04.2 · Earners, hand-drawn" tabindex="0" role="button" aria-label="Open image: Earners, hand-drawn"><img src="img/uber_a.jpg" alt="Earners, hand-drawn" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A04.2</span><span>Earners, hand-drawn</span></figcaption></figure><figure class="fig " data-full="img/uber_c.jpg" data-cap="A04.3 · Thank-you ads in the press" tabindex="0" role="button" aria-label="Open image: Thank-you ads in the press"><img src="img/uber_c.jpg" alt="Thank-you ads in the press" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A04.3</span><span>Thank-you ads in the press</span></figcaption></figure></div>
+  <div class="blocks n4"><div class="blk"><h4>[ Tension ]</h4><p>Uber&#x27;s safety, social and community work was scattered and understated. Self-praise in a pandemic was the risk.</p></div><div class="blk"><h4>[ Idea ]</h4><p>Audit everything, unite it in one ecosystem, and tell it through earners and partners, with proof.</p></div><div class="blk"><h4>[ Result ]</h4><p>An impact home on uber.com, Everyday Giants, Keys to the City rewards and Noor photojournalism in 11 cities.</p></div><div class="blk"><h4>[ Role ]</h4><p>I led about 20 people across strategy, creative, production and external partners.</p></div></div>
+  <div class="extra"><span class="chip">SUB-PROJECT</span><strong>Everyday Giants.</strong> Hero the person, not the platform. A 60-second TVC, five hand-painted murals in four US cities, social and OOH, then UK, France and global phases.</div>
+</section>
+<section class="case sheet" id="canyon" data-code="A05" data-name="Canyon" data-tags="platform brand">
+  <i class="reg tl"></i><i class="reg tr"></i><i class="reg bl"></i><i class="reg br"></i>
+  <header class="case-top">
+    <span class="tc big">A05<small>/08</small></span>
+    <span class="lbl">[ POWER ON, GAME ON ]</span>
+    <span class="meta">Studio Bonjour Design · Founder, ECD and executive producer</span>
+    <span class="tags"><b>Platforms that last</b><b>Brand creation</b></span>
+  </header>
+  <div class="case-title">
+    <h2 class="client">Canyon</h2>
+    <p class="headline"><mark>Sell the attitude, not the motor.</mark></p>
+  </div>
+  <figure class="fig hero" data-full="img/canyon_a.jpg" data-cap="A05.1 · Spectral:ON" tabindex="0" role="button" aria-label="Open image: Spectral:ON"><img src="img/canyon_a.jpg" alt="Spectral:ON" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A05.1</span><span>Spectral:ON</span></figcaption></figure>
+  <div class="strip n2"><figure class="fig " data-full="img/canyon_b.jpg" data-cap="A05.2 · Riders first" tabindex="0" role="button" aria-label="Open image: Riders first"><img src="img/canyon_b.jpg" alt="Riders first" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A05.2</span><span>Riders first</span></figcaption></figure><figure class="fig " data-full="img/canyon_c.jpg" data-cap="A05.3 · The Crossing series" tabindex="0" role="button" aria-label="Open image: The Crossing series"><img src="img/canyon_c.jpg" alt="The Crossing series" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A05.3</span><span>The Crossing series</span></figcaption></figure></div>
+  <div class="blocks n4"><div class="blk"><h4>[ Tension ]</h4><p>E-MTBs were sold as bikes with a motor, on range and specs. The category had no voice.</p></div><div class="blk"><h4>[ Idea ]</h4><p>Power On, Game On: one attitude-led platform for the whole :ON family, told through riders and play.</p></div><div class="blk"><h4>[ Result ]</h4><p>Every model sold out in its launch window, the first in 24 hours. Four more launches followed.</p></div><div class="blk"><h4>[ Role ]</h4><p>Strategy, creative direction and production, plus The Crossing series.</p></div></div>
+  
+</section>
+<section class="case sheet" id="seedlip" data-code="A06" data-name="Seedlip" data-tags="platform">
+  <i class="reg tl"></i><i class="reg tr"></i><i class="reg bl"></i><i class="reg br"></i>
+  <header class="case-top">
+    <span class="tc big">A06<small>/08</small></span>
+    <span class="lbl">[ HELLO CURIOUS ]</span>
+    <span class="meta">HarrimanSteel · Strategy and Creative Director · Diageo</span>
+    <span class="tags"><b>Platforms that last</b></span>
+  </header>
+  <div class="case-title">
+    <h2 class="client">Seedlip</h2>
+    <p class="headline"><mark>Curiosity, not compromise.</mark></p>
+  </div>
+  <figure class="fig hero" data-full="img/seedlip_a.jpg" data-cap="A06.1 · Serve with tonic" tabindex="0" role="button" aria-label="Open image: Serve with tonic"><img src="img/seedlip_a.jpg" alt="Serve with tonic" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A06.1</span><span>Serve with tonic</span></figcaption></figure>
+  <div class="strip n1"><figure class="fig " data-full="img/seedlip_b.jpg" data-cap="A06.2 · The Seedlip characters" tabindex="0" role="button" aria-label="Open image: The Seedlip characters"><img src="img/seedlip_b.jpg" alt="The Seedlip characters" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A06.2</span><span>The Seedlip characters</span></figcaption></figure></div>
+  <div class="blocks n4"><div class="blk"><h4>[ Tension ]</h4><p>People didn&#x27;t know what Seedlip was or how to drink it, in a category built on sacrifice.</p></div><div class="blk"><h4>[ Idea ]</h4><p>Hello Curious: the Seedlip character takes people on a sensory journey through nature and flavour.</p></div><div class="blk"><h4>[ Result ]</h4><p>Films by director Jonathan Jones and assets for every key seasonal moment, for Diageo teams worldwide.</p></div><div class="blk"><h4>[ Role ]</h4><p>Strategy and creative direction.</p></div></div>
+  
+</section>
+<section class="case sheet" id="jordan" data-code="A07" data-name="Jordan Wings" data-tags="platform">
+  <i class="reg tl"></i><i class="reg tr"></i><i class="reg bl"></i><i class="reg br"></i>
+  <header class="case-top">
+    <span class="tc big">A07<small>/08</small></span>
+    <span class="lbl">[ HAND THEM THE MIC ]</span>
+    <span class="meta">HarrimanSteel · Creative Director · Jordan Brand EMEA</span>
+    <span class="tags"><b>Platforms that last</b></span>
+  </header>
+  <div class="case-title">
+    <h2 class="client">Jordan Wings</h2>
+    <p class="headline"><mark>Hand them the mic.</mark></p>
+  </div>
+  <figure class="fig hero" data-full="img/jordan_b.jpg" data-cap="A07.1 · Paris, with the city&#x27;s partners" tabindex="0" role="button" aria-label="Open image: Paris, with the city&#x27;s partners"><img src="img/jordan_b.jpg" alt="Paris, with the city&#x27;s partners" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A07.1</span><span>Paris, with the city&#x27;s partners</span></figcaption></figure>
+  <div class="strip n1"><figure class="fig " data-full="img/jordan_a.jpg" data-cap="A07.2 · Drawn by Parisian illustrators" tabindex="0" role="button" aria-label="Open image: Drawn by Parisian illustrators"><img src="img/jordan_a.jpg" alt="Drawn by Parisian illustrators" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A07.2</span><span>Drawn by Parisian illustrators</span></figcaption></figure></div>
+  <div class="blocks n4"><div class="blk"><h4>[ Tension ]</h4><p>Launch an American brand&#x27;s education programme in Paris without looking like a corporate saviour.</p></div><div class="blk"><h4>[ Idea ]</h4><p>Step the brand back. Three city educational partners and their students tell the story, drawn by three Parisian illustrators.</p></div><div class="blk"><h4>[ Result ]</h4><p>A credible platform for Paris&#x27;s creative youth, and the blueprint for launching Jordan Wings in London.</p></div><div class="blk"><h4>[ Role ]</h4><p>Launch toolkit, messaging and content.</p></div></div>
+  
+</section>
+<section class="case sheet" id="coke" data-code="A08" data-name="Coca-Cola Benelux" data-tags="experience">
+  <i class="reg tl"></i><i class="reg tr"></i><i class="reg bl"></i><i class="reg br"></i>
+  <header class="case-top">
+    <span class="tc big">A08<small>/08</small></span>
+    <span class="lbl">[ LAUNCH THE RITUAL ]</span>
+    <span class="meta">Brand Potential Benelux · Executive Creative Director</span>
+    <span class="tags"><b>Experience and retail</b></span>
+  </header>
+  <div class="case-title">
+    <h2 class="client">Coca-Cola Benelux</h2>
+    <p class="headline"><mark>Launch the ritual, not the can.</mark></p>
+  </div>
+  <figure class="fig hero" data-full="img/coke_a.jpg" data-cap="A08.1 · Baco at A&#x27;DAM Tower" tabindex="0" role="button" aria-label="Open image: Baco at A&#x27;DAM Tower"><img src="img/coke_a.jpg" alt="Baco at A&#x27;DAM Tower" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A08.1</span><span>Baco at A&#x27;DAM Tower</span></figcaption></figure>
+  <div class="strip n2"><figure class="fig " data-full="img/coke_b.jpg" data-cap="A08.2 · The Baco loft" tabindex="0" role="button" aria-label="Open image: The Baco loft"><img src="img/coke_b.jpg" alt="The Baco loft" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A08.2</span><span>The Baco loft</span></figcaption></figure><figure class="fig " data-full="img/coke_c.jpg" data-cap="A08.3 · Zero Zero: Switch to gold" tabindex="0" role="button" aria-label="Open image: Zero Zero: Switch to gold"><img src="img/coke_c.jpg" alt="Zero Zero: Switch to gold" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG A08.3</span><span>Zero Zero: Switch to gold</span></figcaption></figure></div>
+  <div class="blocks n4"><div class="blk"><h4>[ Tension ]</h4><p>Most FMCG launches are a trade push and a press release: siloed, and not worth sharing.</p></div><div class="blk"><h4>[ Idea ]</h4><p>Earned-first launches planted inside cultural moments, with design and PR working from the first brief.</p></div><div class="blk"><h4>[ Result ]</h4><p>Coca-Cola Baco at A&#x27;DAM Tower, Zero Zero&#x27;s Switch to gold, and an extended partnership.</p></div><div class="blk"><h4>[ Role ]</h4><p>I led the design studio and PR practice as one team.</p></div></div>
+  
+</section>
+  </section>
+
+  <section id="more" aria-label="More work">
+    <div class="more" id="moreField">
+      <canvas id="pix" aria-hidden="true"></canvas>
+      <a class="ml" href="#asics" style="--x:6%;--y:12%" data-v="0">ASICS TENNIS</a><a class="ml" href="#puma" style="--x:56%;--y:10%" data-v="0">PUMA SKILL CUBE</a><a class="ml" href="#aid" style="--x:30%;--y:30%" data-v="1">AID ALLIANCE</a><a class="ml" href="#allbirds" style="--x:68%;--y:38%" data-v="0">ALLBIRDS</a><a class="ml" href="#adidas" style="--x:42%;--y:54%" data-v="0">ADIDAS CLIMA</a><a class="ml" href="#heineken" style="--x:58%;--y:64%" data-v="1">HEINEKEN</a><a class="ml" href="#jyuni" style="--x:76%;--y:84%" data-v="0">ASICS JYUNI</a>
+      <div class="ttl"><small>[ 05 ] B SIDE · Range</small>More<br>work.</div>
+    </div>
+    <div class="bgrid"><article class="bcard" id="asics" data-code="B01" data-name="ASICS Tennis" data-tags="platform">
+  <figure class="fig bimg" data-full="img/asics_a.jpg" data-cap="B01.1 · The ball waits for no one" tabindex="0" role="button" aria-label="Open image: The ball waits for no one"><img src="img/asics_a.jpg" alt="The ball waits for no one" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG B01.1</span><span>The ball waits for no one</span></figcaption></figure>
+  <div class="bbody"><span class="tc">B01</span><h3>ASICS Tennis</h3><p class="bhead">The ball waits for no one.</p><p>Real on-court moments where pros go the extra mile, linked to speed and control in the shoe. Djokovic hero films, a year of always-on content with Monfils and Görges, Grand Slam activations.</p><p class="bmeta">Green Room Design · Creative Lead</p></div>
+</article><article class="bcard" id="puma" data-code="B02" data-name="PUMA Skill Cube" data-tags="experience">
+  <figure class="fig bimg" data-full="img/puma_a.jpg" data-cap="B02.1 · Idols brought to earth" tabindex="0" role="button" aria-label="Open image: Idols brought to earth"><img src="img/puma_a.jpg" alt="Idols brought to earth" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG B02.1</span><span>Idols brought to earth</span></figcaption></figure>
+  <div class="bbody"><span class="tc">B02</span><h3>PUMA Skill Cube</h3><p class="bhead">Idols brought to earth.</p><p>A multi-sensory training simulator that is also the shoe trial, hosted by Hamilton, Griezmann and Lukaku. The headline experience and PR draw of PUMA&#x27;s Fifth Avenue flagship.</p><p class="bmeta">Green Room Design · 2019–20 · Creative Lead</p></div>
+</article><article class="bcard" id="aid" data-code="B03" data-name="Aid Alliance" data-tags="brand">
+  <figure class="fig bimg" data-full="img/aid_a.jpg" data-cap="B03.1 · Help can come from anywhere" tabindex="0" role="button" aria-label="Open image: Help can come from anywhere"><img src="img/aid_a.jpg" alt="Help can come from anywhere" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG B03.1</span><span>Help can come from anywhere</span></figcaption></figure>
+  <div class="bbody"><span class="tc">B03</span><h3>Aid Alliance</h3><p class="bhead">Help can come from anywhere.</p><p>A logo drawn as a beam of light: simple and bold, and a frame for every image and message. A modular brand mark and playbook, flexible across every channel and partner.</p><p class="bmeta">HarrimanSteel · Creative Director</p></div>
+</article><article class="bcard" id="allbirds" data-code="B04" data-name="Allbirds" data-tags="experience">
+  <figure class="fig bimg" data-full="img/allbirds_a.jpg" data-cap="B04.1 · Materials you can touch" tabindex="0" role="button" aria-label="Open image: Materials you can touch"><img src="img/allbirds_a.jpg" alt="Materials you can touch" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG B04.1</span><span>Materials you can touch</span></figcaption></figure>
+  <div class="bbody"><span class="tc">B04</span><h3>Allbirds</h3><p class="bhead">Materials you can touch.</p><p>A material-led installation: visitors touch the wool, wood and sugar cane the shoes are made from, in a space built only from ethically sourced, circular materials.</p><p class="bmeta">Selfridges · Le Bon Marché · Creative Director</p></div>
+</article><article class="bcard" id="adidas" data-code="B05" data-name="adidas Clima" data-tags="platform">
+  <figure class="fig bimg" data-full="img/adidas_b.jpg" data-cap="B05.1 · Not made for normal" tabindex="0" role="button" aria-label="Open image: Not made for normal"><img src="img/adidas_b.jpg" alt="Not made for normal" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG B05.1</span><span>Not made for normal</span></figcaption></figure>
+  <div class="bbody"><span class="tc">B05</span><h3>adidas Clima</h3><p class="bhead">Not made for normal.</p><p>Athletes who use the harshest conditions to get stronger, shot in a raw documentary style. A four-season platform across Climachill, Climaheat and Forget Cold.</p><p class="bmeta">adidas Brand Design · Art Director / Senior Designer</p></div>
+</article><article class="bcard" id="heineken" data-code="B06" data-name="Heineken" data-tags="experience">
+  <figure class="fig bimg" data-full="img/heineken_a.jpg" data-cap="B06.1 · Get people back together" tabindex="0" role="button" aria-label="Open image: Get people back together"><img src="img/heineken_a.jpg" alt="Get people back together" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG B06.1</span><span>Get people back together</span></figcaption></figure>
+  <div class="bbody"><span class="tc">B06</span><h3>Heineken</h3><p class="bhead">Get people back together.</p><p>A product, not a campaign: a social app on Heineken&#x27;s on-trade network to plan nights out. Tested in the UK and Brazil; ChinChin launched in the UK.</p><p class="bmeta">Le Pub · Strategy and innovation</p></div>
+</article><article class="bcard" id="jyuni" data-code="B07" data-name="ASICS JYUNI" data-tags="platform">
+  <figure class="fig bimg" data-full="img/jyuni_a.jpg" data-cap="B07.1 · A film for ASICS" tabindex="0" role="button" aria-label="Open image: A film for ASICS"><img src="img/jyuni_a.jpg" alt="A film for ASICS" loading="lazy" decoding="async"><i class="tone" aria-hidden="true"></i><figcaption><span>FIG B07.1</span><span>A film for ASICS</span></figcaption></figure>
+  <div class="bbody"><span class="tc">B07</span><h3>ASICS JYUNI</h3><p class="bhead">A film for ASICS.</p><p>Part of the ASICS body of work. <a class="ext" href="https://www.youtube.com/watch?v=V8fT7zFGBMU">Watch the film ↗</a></p><p class="bmeta">Green Room Design · Film</p></div>
+</article></div>
+  </section>
+
+  <section id="lead" aria-labelledby="lead-h">
+    <div class="sec-h"><span class="tc">[ 06 ] HOW I LEAD</span><h2 id="lead-h">How I run a creative department.</h2></div>
+    <div class="cells"><div class="cell"><span class="tc">01</span><h3>Systems, then craft</h3><p>Design the system that scales first, then sweat the details that make it feel real.</p></div><div class="cell"><span class="tc">02</span><h3>Hands-on leadership</h3><p>I lead multidisciplinary teams, mentor the next creative leads and stay in the work.</p></div><div class="cell"><span class="tc">03</span><h3>Design and PR together</h3><p>Plan for earned attention from the first brief, not as an add-on at the end.</p></div><div class="cell"><span class="tc">04</span><h3>AI-first workflows</h3><p>Faster exploration and production, with people making the creative calls.</p></div></div>
+  </section>
+</div>
+
+<section class="contact" id="contact" aria-labelledby="contact-h">
+  <span class="tc" style="color:#9a9a94">[ 07 ] CONTACT</span>
+  <h2 id="contact-h">Many <mark>thanks.</mark></h2>
+  <div class="cgrid">
+    <div><span class="tc">EMAIL</span><a href="mailto:gfurminger@gmail.com">gfurminger@gmail.com</a><br><button type="button" class="copyb" data-copy="gfurminger@gmail.com">Copy email</button></div>
+    <div><span class="tc">WEB</span><a href="https://guillaumefurminger.com">guillaumefurminger.com</a></div>
+    <div><span class="tc">PHONE</span><span class="v">+31 6 46 80 80 59</span></div>
+  </div>
+  <div class="foot"><span class="bars" aria-hidden="true"></span><span>Guillaume Furminger · Executive Creative Director · Amsterdam</span><span>© 2026</span></div>
+</section>
+</main>
+
+<div class="peek" id="peek" aria-hidden="true"></div>
+<div class="keys" aria-hidden="true"><span class="cur" id="kcur">A01</span><span><kbd>J</kbd> <kbd>K</kbd> next / previous project</span></div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <div class="lt"><span id="lbCap"></span><button type="button" id="lbX">Close [Esc]</button></div>
+  <div class="stage"><img id="lbImg" alt=""></div>
+  <div class="lnav"><button type="button" id="lbP">← Previous</button><button type="button" id="lbN">Next →</button></div>
+</div>
+
+<script>
+(()=>{
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = (s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+/* clock (Amsterdam) */
+const clk=$('#clock');
+const tickClock=()=>{try{clk.textContent=new Date().toLocaleTimeString('en-GB',{timeZone:'Europe/Amsterdam',hour12:false})}catch(e){clk.textContent=new Date().toTimeString().slice(0,8)}};
+tickClock();setInterval(tickClock,1000);
+
+/* image mode */
+const setMode=c=>{document.body.classList.toggle('colour',c);$('#mCol').setAttribute('aria-pressed',c);$('#mMono').setAttribute('aria-pressed',!c);store.set('gf-mode',c?'c':'m')};
+$('#mCol').onclick=()=>setMode(true);$('#mMono').onclick=()=>setMode(false);
+if(store.get('gf-mode')==='c')setMode(true);
+
+/* ---------- hero field: scattered squares that react to the pointer ---------- */
+const cv=$('#field'),hero=$('#pov'),ctx=cv.getContext('2d');
+let W=0,H=0,DPR=1,pts=[],mx=-9999,my=-9999,need=true;
+function rnd(s){return()=>{s=(s*16807)%2147483647;return(s-1)/2147483646}}
+function build(){
+  const r=hero.getBoundingClientRect();DPR=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;
+  cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
+  const R=rnd(7);pts=[];
+  const step=W<700?22:26;
+  for(let y=step/2;y<H;y+=step)for(let x=step/2;x<W;x+=step){
+    // density field: denser on the right and in clustered bands, like a plotted dataset
+    const d=.18+.62*Math.pow(x/W,1.4)*(.55+.45*Math.sin(y/H*6.2+x/W*3));
+    if(R()<d){pts.push({x:x+(R()-.5)*step*.8,y:y+(R()-.5)*step*.8,s:R()<.5?7:5,k:R()})}
+  }
+  need=true;
+}
+function draw(){
+  if(!need)return;need=false;
+  ctx.clearRect(0,0,W,H);
+  // plotting grid block, top right
+  ctx.strokeStyle='rgba(13,13,12,.22)';ctx.lineWidth=1;
+  const gx=W*.62,gy=H*.06,gw=W*.34,gh=H*.62,c=Math.max(14,Math.round(gw/22));
+  ctx.beginPath();for(let x=gx;x<=gx+gw+.5;x+=c){ctx.moveTo(x+.5,gy);ctx.lineTo(x+.5,gy+gh)}for(let y=gy;y<=gy+gh+.5;y+=c){ctx.moveTo(gx,y+.5);ctx.lineTo(gx+gw,y+.5)}ctx.stroke();
+  ctx.beginPath();ctx.arc(gx,gy+gh/2,gh/2,-Math.PI/2,Math.PI/2);ctx.stroke();
+  ctx.fillStyle='#0D0D0C';[[gx,gy],[gx+gw,gy],[gx,gy+gh],[gx+gw,gy+gh]].forEach(([x,y])=>ctx.fillRect(x-4,y-4,8,8));
+  const rad=W<700?90:150;
+  for(const p of pts){
+    const dx=p.x-mx,dy=p.y-my,d=Math.sqrt(dx*dx+dy*dy);
+    const near=d<rad, t=near?1-d/rad:0;
+    // squares are pushed slightly away from the pointer
+    const ox=near?dx/d*t*10:0, oy=near?dy/d*t*10:0, s=p.s+(near?t*3:0);
+    const x=p.x+ox-s/2,y=p.y+oy-s/2;
+    if(near&&p.k<.35+t*.5){ctx.fillStyle=p.k<.12?'#D2FF1F':'#0D0D0C';ctx.fillRect(x,y,s,s);if(p.k<.12){ctx.strokeStyle='#0D0D0C';ctx.strokeRect(x+.5,y+.5,s-1,s-1)}}
+    else{ctx.strokeStyle=near?'rgba(13,13,12,.85)':'rgba(13,13,12,.38)';ctx.strokeRect(x+.5,y+.5,s-1,s-1)}
+  }
+  if(mx>0){ // crosshair + readout
+    ctx.strokeStyle='rgba(13,13,12,.5)';ctx.setLineDash([2,4]);ctx.beginPath();ctx.moveTo(0,my+.5);ctx.lineTo(W,my+.5);ctx.moveTo(mx+.5,0);ctx.lineTo(mx+.5,H);ctx.stroke();ctx.setLineDash([]);
+    ctx.font='500 10px "IBM Plex Mono",monospace';const lab=`X ${String(Math.round(mx)).padStart(4,'0')}  Y ${String(Math.round(my)).padStart(4,'0')}`;
+    const tw=ctx.measureText(lab).width;ctx.fillStyle='#0D0D0C';ctx.fillRect(mx+10,my+10,tw+10,16);ctx.fillStyle='#E6E6E1';ctx.fillText(lab,mx+15,my+21);
+  }
+}
+let raf=0;const loop=()=>{draw();raf=requestAnimationFrame(loop)};
+build();draw();if(!RM)loop();
+addEventListener('resize',()=>{build();if(RM)draw()});
+hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;need=true;if(RM)draw()});
+hero.addEventListener('pointerleave',()=>{mx=my=-9999;need=true;if(RM)draw()});
+
+/* ---------- index: hover peek + filters ---------- */
+const peek=$('#peek');let px=0,py=0,tx=0,ty=0;
+$$('.trk a').forEach(a=>{
+  a.addEventListener('pointerenter',()=>{const src=a.dataset.img;if(!src){peek.classList.remove('on');return}peek.style.backgroundImage=`url("${src}")`;peek.dataset.code=a.querySelector('.tc').textContent;peek.classList.add('on')});
+  a.addEventListener('pointerleave',()=>peek.classList.remove('on'));
+});
+addEventListener('scroll',()=>peek.classList.remove('on'),{passive:true});
+addEventListener('pointermove',e=>{tx=e.clientX+190;ty=e.clientY;if(tx>innerWidth-180)tx=e.clientX-190});
+(function follow(){px+=(tx-px)*.2;py+=(ty-py)*.2;peek.style.left=px+'px';peek.style.top=py+'px';requestAnimationFrame(follow)})();
+function filt(f){
+  $$('.chipb').forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===f));
+  $$('.trk').forEach(t=>t.classList.toggle('dim',f!=='all'&&!t.dataset.tags.split(' ').includes(f)));
+}
+$$('.chipb').forEach(b=>b.onclick=()=>filt(b.dataset.f));
+$$('.cell[data-filter]').forEach(c=>{if(!c.dataset.filter)return;c.tabIndex=0;c.setAttribute('role','button');
+  const go=()=>{filt(c.dataset.filter);$('#index').scrollIntoView({behavior:RM?'auto':'smooth'})};c.onclick=go;c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}}});
+
+/* ---------- progress, current project, nav highlight ---------- */
+const prog=$('#prog'),kcur=$('#kcur');
+const projects=$$('[data-code]').filter(el=>el.matches('.case,.bcard'));
+const navs=$$('.bar nav a');
+function onScroll(){
+  const h=document.documentElement;prog.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+  let cur=projects[0];for(const p of projects){if(p.getBoundingClientRect().top<innerHeight*.45)cur=p}
+  kcur.textContent=cur.dataset.code+' · '+cur.dataset.name;
+  let sec='';for(const a of navs){const t=$(a.getAttribute('href'));if(t&&t.getBoundingClientRect().top<innerHeight*.4)sec=a.getAttribute('href')}
+  navs.forEach(a=>a.classList.toggle('on',a.getAttribute('href')===sec));
+}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+addEventListener('keydown',e=>{
+  if($('#lb').classList.contains('on')||e.target.matches('input,textarea'))return;
+  if(e.key!=='j'&&e.key!=='k')return;
+  const y=innerHeight*.2;let i=projects.findIndex(p=>p.getBoundingClientRect().top>y+4);if(i<0)i=projects.length;
+  const t=e.key==='j'?projects[i]:projects[Math.max(0,i-2)];
+  if(t)t.scrollIntoView({behavior:RM?'auto':'smooth'});
+});
+
+/* ---------- stats: scramble into place when they enter ---------- */
+const nums=$$('.num');
+if('IntersectionObserver' in window&&!RM){
+  const io=new IntersectionObserver(es=>es.forEach(en=>{if(!en.isIntersecting)return;io.unobserve(en.target);
+    const el=en.target,v=el.dataset.v;let f=0;const id=setInterval(()=>{f++;
+      el.textContent=v.split('').map((ch,i)=>/\d/.test(ch)&&f<14+i*2?String(Math.floor(Math.random()*10)):ch).join('');
+      if(f>14+v.length*2){clearInterval(id);el.textContent=v}},40)}),{threshold:.6});
+  nums.forEach(n=>io.observe(n));
+}
+
+/* ---------- lightbox ---------- */
+const figs=$$('.fig'),lb=$('#lb'),lbImg=$('#lbImg'),lbCap=$('#lbCap');let li=0,lastFocus=null;
+function openLB(i){li=(i+figs.length)%figs.length;const f=figs[li];lbImg.src=f.dataset.full;lbImg.alt=f.querySelector('img').alt;lbCap.textContent=f.dataset.cap+'  ['+(li+1)+'/'+figs.length+']';
+  if(!lb.classList.contains('on')){lastFocus=document.activeElement;lb.classList.add('on');$('#lbX').focus()}}
+const closeLB=()=>{lb.classList.remove('on');lastFocus&&lastFocus.focus()};
+figs.forEach((f,i)=>{f.onclick=()=>openLB(i);f.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openLB(i)}}});
+$('#lbX').onclick=closeLB;$('#lbP').onclick=()=>openLB(li-1);$('#lbN').onclick=()=>openLB(li+1);
+lb.addEventListener('click',e=>{if(e.target===lb||e.target.classList.contains('stage'))closeLB()});
+addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')closeLB();if(e.key==='ArrowLeft')openLB(li-1);if(e.key==='ArrowRight')openLB(li+1);
+  if(e.key==='Tab'){const b=$$('button',lb);const i=b.indexOf(document.activeElement);e.preventDefault();b[(i+(e.shiftKey?-1:1)+b.length)%b.length].focus()}});
+
+/* ---------- more work: drifting pixel field ---------- */
+const pc=$('#pix'),pctx=pc.getContext('2d'),mf=$('#moreField');
+const PAL=['#7fc3ee','#a9d6f3','#cfe7f7','#eef5f8','#9fe08a','#6fd04f','#c6efb4','#d9c6ef'];
+let pw,ph,cell,cols,rows,seed=[],t0=0;
+function pbuild(){const r=mf.getBoundingClientRect();pw=r.width;ph=r.height;const d=Math.min(2,devicePixelRatio||1);pc.width=pw*d;pc.height=ph*d;pctx.setTransform(d,0,0,d,0,0);
+  cell=pw<700?20:28;cols=Math.ceil(pw/cell)+1;rows=Math.ceil(ph/(cell*.66))+1;const R=rnd(11);seed=Array.from({length:cols*rows},()=>R());}
+function pdraw(t){
+  const ch=cell*.66;
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+    const s=seed[r*cols+c];
+    // blue sky above, green rising from below, with columns of green pushing up
+    const g=(r/rows)+.35*Math.sin(c*.55+s*2)+.18*Math.sin(t*.0004+c*.3+r*.15);
+    let k=g<.55?(s<.5?0:s<.8?1:s<.95?2:7):(s<.4?4:s<.7?6:s<.85?5:s<.95?3:7);
+    if(s>.985)k=3;
+    pctx.fillStyle=PAL[k];pctx.fillRect(c*cell,r*ch,cell+1,ch+1);
+  }
+}
+pbuild();pdraw(0);
+let pvis=false;if('IntersectionObserver' in window){new IntersectionObserver(es=>{pvis=es[0].isIntersecting}).observe(mf)}
+if(!RM){let last=0;(function pl(t){if(pvis&&t-last>120){pdraw(t);last=t}requestAnimationFrame(pl)})(0)}
+addEventListener('resize',()=>{pbuild();pdraw(performance.now())});
+
+/* ---------- generated covers for projects without photography ---------- */
+$$('.gen').forEach(g=>{const c=$('canvas',g),x=c.getContext('2d');const draw=()=>{const r=g.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);c.width=r.width*d;c.height=r.height*d;x.setTransform(d,0,0,d,0,0);
+  let s=0;for(const ch of g.dataset.seed)s=s*31+ch.charCodeAt(0);const R=rnd(s%2147483646+1);
+  x.strokeStyle='rgba(13,13,12,.25)';const st=24;x.beginPath();for(let i=0;i<r.width;i+=st){x.moveTo(i+.5,0);x.lineTo(i+.5,r.height)}for(let j=0;j<r.height;j+=st){x.moveTo(0,j+.5);x.lineTo(r.width,j+.5)}x.stroke();
+  const cx=r.width*(.3+R()*.4),cy=r.height*(.3+R()*.4);
+  for(let i=0;i<900;i++){const a=R()*Math.PI*2,rr=Math.pow(R(),.6)*Math.min(r.width,r.height)*.55,px=cx+Math.cos(a)*rr*1.3,py=cy+Math.sin(a)*rr;const sz=R()<.5?4:6;
+    if(R()<.42){x.fillStyle=R()<.08?'#D2FF1F':'#0D0D0C';x.fillRect(px,py,sz,sz)}else{x.strokeStyle='rgba(13,13,12,.6)';x.strokeRect(px+.5,py+.5,sz,sz)}}
+  x.fillStyle='#0D0D0C';[[cx,10],[r.width-14,cy],[cx,r.height-14],[10,cy]].forEach(([a,b])=>x.fillRect(a,b,8,8))};draw();addEventListener('resize',draw)});
+
+/* copy email */
+$$('.copyb').forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText(b.dataset.copy);b.textContent='Copied'}catch(e){b.textContent='Select and copy the address above'}setTimeout(()=>b.textContent='Copy email',2200)});
+})();
+</script>
+</body>
+</html>
